@@ -1,0 +1,619 @@
+{
+    "appid": "600d229d-bff3-42cc-ba3f-863b8b701f2e",
+    "name": "CSC DomainManager",
+    "description": "CSC DomainManager API",
+    "type": "information",
+    "product_vendor": "Corporation Services Company",
+    "logo": "cscdomainmanager.svg",
+    "logo_dark": "cscdomainmanager_dark.svg",
+    "product_name": "DomainManager",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "Splunk",
+    "license": "Copyright (c) Splunk, 2023",
+    "app_version": "1.1.0",
+    "utctime_updated": "2023-01-22T12:35:20.608316Z",
+    "package_name": "phantom_cscdomainmanager",
+    "main_module": "cscdomainmanager_connector.py",
+    "min_phantom_version": "5.3.2.88192",
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "accountNumber": {
+            "description": "CSC account number",
+            "data_type": "numeric",
+            "required": true,
+            "value_list": [],
+            "default": "1234567",
+            "order": 0,
+            "name": "accountNumber",
+            "id": 0
+        },
+        "apikey": {
+            "description": "API key for authentication",
+            "data_type": "password",
+            "required": true,
+            "order": 1,
+            "name": "apikey",
+            "id": 1
+        },
+        "bearer_token": {
+            "description": "Bearer token that accompanies API key for authentication",
+            "data_type": "password",
+            "required": true,
+            "order": 2,
+            "name": "bearer_token",
+            "id": 2
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "verbose": "",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get all domains",
+            "identifier": "get_all_domains",
+            "description": "Get domain portfolio data",
+            "verbose": "By default, pull first page of domains found in the account (15000 by default).  If provided, filter parameter can limit the search results.\n\n<a href=\"https://www.cscglobal.com/cscglobal/docs/dbs/domainmanager/api-v2/#/domains/get_domains\">Link to CSC documentation, for reference</a>",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "selector": {
+                    "description": "The attribute of the domain to search with.  For example, \"qualifiedDomainName=like='example\\*'\" or \"nameservers=in=('dns1.mydns.com', 'dns2.mydns.com')\"",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [
+                        "*"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "selector",
+                    "id": 1,
+                    "param_name": "selector"
+                },
+                "operator": {
+                    "description": "Search operators used to clarify selector.  == for Equals, =gt= for Greater Than, =le= for Less Than or Equal To, etc.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 1,
+                    "name": "operator",
+                    "id": 2,
+                    "param_name": "operator"
+                },
+                "value": {
+                    "description": "Value to compare to selector based on operator.  For example, \"filter=qualifiedDomainName=={value}\"",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 2,
+                    "name": "value",
+                    "id": 3,
+                    "param_name": "value"
+                },
+                "sort": {
+                    "description": "Specify how results should be sorted:  Ex:  propertyName,(desc|asc)",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 3,
+                    "name": "sort",
+                    "id": 4,
+                    "param_name": "sort"
+                },
+                "custom": {
+                    "description": "For custom or more complex searches that use joiner values",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 4,
+                    "name": "custom",
+                    "id": 5,
+                    "param_name": "custom"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.selector",
+                    "data_type": "string",
+                    "contains": [
+                        "*"
+                    ],
+                    "column_name": "selector",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.operator",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "operator",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.value",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "value",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.sort",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "sort",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.parameter.custom",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "custom",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get specific domain",
+            "identifier": "get_specific_domain",
+            "description": "Get domain data by qualified domain name",
+            "verbose": "Return all data about specified domain",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "fqdn": {
+                    "description": "Qualified domain name",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "fqdn",
+                    "id": 1,
+                    "param_name": "fqdn"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.fqdn",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "fqdn",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "check domain available",
+            "identifier": "check_domain_available",
+            "description": "Check registration availability for one or more domain names",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "fqdn": {
+                    "description": "Values of one or more domains to check for availability, separated by a comma.  Max 50 domains in one query.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "fqdn",
+                    "id": 1,
+                    "param_name": "fqdn"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.fqdn",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "fqdn",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "register domain",
+            "identifier": "register_domain",
+            "description": "Place a domain registration order",
+            "verbose": "If an order template is available for the account mapped to the bearer token, then only the \"qualifiedDomainName\" property is required.  Otherwise, the request is built with the values provided in the fields below.\n\n[Link to CSC Documentation](https://www.cscglobal.com/cscglobal/docs/dbs/domainmanager/api-v2/#/domains/post_domains_registration)",
+            "type": "correct",
+            "read_only": false,
+            "parameters": {
+                "qualifieddomainname": {
+                    "description": "Domain to register",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "qualifieddomainname",
+                    "id": 1,
+                    "param_name": "qualifieddomainname"
+                },
+                "businessunit": {
+                    "description": "Business Unit abbreviation to use in domain registration.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 1,
+                    "name": "businessunit",
+                    "id": 2,
+                    "param_name": "businessunit"
+                },
+                "term": {
+                    "description": "Term, in months, to register domain.  Defaults to 12 months.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 2,
+                    "name": "term",
+                    "id": 3,
+                    "param_name": "term"
+                },
+                "brand": {
+                    "description": "Brand name value to provide in domain registration.  Defaults to empty string.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 3,
+                    "name": "brand",
+                    "id": 4,
+                    "param_name": "brand"
+                },
+                "registrantprofile": {
+                    "description": "Value to list as whois contact.  Must exist already in CSC or order will be incomplete.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 4,
+                    "name": "registrantprofile",
+                    "id": 5,
+                    "param_name": "registrantprofile"
+                },
+                "adminprofile": {
+                    "description": "Value to list as whois contact.  Must exist already in CSC or order will be incomplete.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 5,
+                    "name": "adminprofile",
+                    "id": 6,
+                    "param_name": "adminprofile"
+                },
+                "technicalprofile": {
+                    "description": "Value to list as whois contact.  Must exist already in CSC or order will be incomplete.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 6,
+                    "name": "technicalprofile",
+                    "id": 7,
+                    "param_name": "technicalprofile"
+                },
+                "nameservers": {
+                    "description": "Comma-separated string of name servers to use in registration.  Only required if there is no order template mapped to your bearer token.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 7,
+                    "name": "nameservers",
+                    "id": 8,
+                    "param_name": "nameservers"
+                },
+                "dnstype": {
+                    "description": "Type of DNS configuration.  Defaults to CSC_BASIC.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 8,
+                    "name": "dnstype",
+                    "id": 9,
+                    "param_name": "dnstype"
+                },
+                "notes": {
+                    "description": "Notes to provide in registration payload.  Defaults to \"Registered by Security Automation\" if not provided.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 9,
+                    "name": "notes",
+                    "id": 10,
+                    "param_name": "notes"
+                },
+                "notificationsenabled": {
+                    "description": "Whether or not email notifications are enabled for domain registration.  Defaults to False.",
+                    "data_type": "boolean",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "default": "",
+                    "order": 10,
+                    "name": "notificationsenabled",
+                    "id": 11,
+                    "param_name": "notificationsenabled"
+                },
+                "additionalnotificationemails": {
+                    "description": "Comma-separated string of email addresses to add as receivers of notifications related to this domain.",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 11,
+                    "name": "additionalnotificationemails",
+                    "id": 12,
+                    "param_name": "additionalnotificationemails"
+                },
+                "redactpublicwhois": {
+                    "description": "Whether to anonymize public whois info.  Defaults to False.",
+                    "data_type": "boolean",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "default": "",
+                    "order": 12,
+                    "name": "redactpublicwhois",
+                    "id": 13,
+                    "param_name": "redactpublicwhois"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.qualifieddomainname",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "qualifieddomainname",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.businessunit",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "businessunit",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.term",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "term",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.brand",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "brand",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.parameter.registrantprofile",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "registrantprofile",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.parameter.adminprofile",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "adminprofile",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.parameter.technicalprofile",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "technicalprofile",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.parameter.nameservers",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "nameservers",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.parameter.dnstype",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "dnstype",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.parameter.notes",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "notes",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.parameter.notificationsenabled",
+                    "data_type": "boolean",
+                    "contains": [],
+                    "column_name": "notificationsenabled",
+                    "column_order": 10
+                },
+                {
+                    "data_path": "action_result.parameter.additionalnotificationemails",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "additionalnotificationemails",
+                    "column_order": 11
+                },
+                {
+                    "data_path": "action_result.parameter.redactpublicwhois",
+                    "data_type": "boolean",
+                    "contains": [],
+                    "column_name": "redactpublicwhois",
+                    "column_order": 12
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 13
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        }
+    ],
+    "custom_made": true,
+    "directory": "cscdomainmanager_600d229d-bff3-42cc-ba3f-863b8b701f2e",
+    "version": 1,
+    "appname": "-",
+    "executable": "spawn3",
+    "disabled": false,
+    "copied_from_id": 262,
+    "copied_from_version": "1.0.0"
+}
