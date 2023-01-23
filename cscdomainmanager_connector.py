@@ -20,9 +20,10 @@ import sys
 import phantom.app as phantom
 import requests
 from bs4 import BeautifulSoup
-from cscdomainmanager_consts import CSC_PRODUCTION_URL
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
+
+from cscdomainmanager_consts import CSC_PRODUCTION_URL
 
 
 class RetVal(tuple):
