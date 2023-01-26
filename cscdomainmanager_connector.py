@@ -40,7 +40,7 @@ class CscDomainManagerConnector(BaseConnector):
         super().__init__()
 
         self._state = None
-        self._base_url = CSC_PRODUCTION_URL
+        self._base_url = None
         self._account_number = None
         self._request_headers = {"Accept": "application/json"}
 
@@ -350,9 +350,10 @@ class CscDomainManagerConnector(BaseConnector):
         self._state = self.load_state()
         # get the asset config
         config = self.get_config()
-        self._account_number = config["accountNumber"]
-        self._request_headers["apikey"] = config["apikey"]
-        self._request_headers["Authorization"] = f"Bearer {config['bearer_token']}"
+        self._account_number = config.get("accountNumber")
+        self._request_headers["apikey"] = config("apikey")
+        self._request_headers["Authorization"] = f"Bearer {config.get('bearer_token')}"
+        self._base_url = config.get("endpoint_url", CSC_PRODUCTION_URL)
         return phantom.APP_SUCCESS
 
     def finalize(self):
