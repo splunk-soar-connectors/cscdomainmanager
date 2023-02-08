@@ -1,4 +1,19 @@
-#!/usr/bin/python
+# File: cscdomainmanager_connector.py
+#
+# Copyright (c) 2023 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
+
+# !/usr/bin/python
 # -*- coding: utf-8 -*-
 """
     API References:
@@ -23,7 +38,7 @@ from bs4 import BeautifulSoup
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
-from cscdomainmanager_consts import CSC_PRODUCTION_URL
+import cscdomainmanager_consts as consts
 
 
 class RetVal(tuple):
@@ -45,12 +60,12 @@ class CscDomainManagerConnector(BaseConnector):
         self._request_headers = {"Accept": "application/json"}
 
     def _process_empty_response(self, response, action_result):
-        if response.status_code == 200:
+        if response.status_code == [200, 204]:
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(
             action_result.set_status(
-                phantom.APP_ERROR, "Empty response and no information in the header"
+                phantom.APP_ERROR, "Empty response and no information in the header, Statuscode: {}".format(response.status_code)
             ),
             None,
         )
@@ -60,6 +75,9 @@ class CscDomainManagerConnector(BaseConnector):
 
         try:
             soup = BeautifulSoup(response.text, "html.parser")
+            # Remove the script, style, footer and navigation part from the HTML message
+            for element in soup(["script", "style", "footer", "nav"]):
+                element.extract()
             error_text = soup.text
             split_lines = error_text.split("\n")
             split_lines = [x.strip() for x in split_lines if x.strip()]
@@ -353,7 +371,7 @@ class CscDomainManagerConnector(BaseConnector):
         self._account_number = config.get("accountNumber")
         self._request_headers["apikey"] = config("apikey")
         self._request_headers["Authorization"] = f"Bearer {config.get('bearer_token')}"
-        self._base_url = config.get("endpoint_url", CSC_PRODUCTION_URL)
+        self._base_url = config.get("endpoint_url", consts.CSC_PRODUCTION_URL)
         return phantom.APP_SUCCESS
 
     def finalize(self):
@@ -380,12 +398,14 @@ def main():
     argparser.add_argument(
         "-p", "--password", help="Splunk SOAR password", required=False
     )
+    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
 
     args = argparser.parse_args()
     session_id = None
 
     username = args.username
     password = args.password
+    verify = args.verify
 
     if args.username is not None and args.password is None:
         # User specified a username but not a password, so ask
@@ -396,7 +416,7 @@ def main():
             login_url = CscDomainManagerConnector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
-            response = requests.get(login_url, verify=False)  # nosec
+            response = requests.get(login_url, verify=verify, timeout=consts.CSC_DEFAULT_TIMEOUT)  # nosec
             csrftoken = response.cookies["csrftoken"]
 
             data = {
@@ -409,7 +429,7 @@ def main():
 
             print("Logging into Platform to get the session id")
             response = requests.post(  # nosec
-                login_url, verify=False, data=data, headers=headers
+                login_url, verify=verify, data=data, headers=headers, timeout=consts.CSC_DEFAULT_TIMEOUT
             )
             session_id = response.cookies["sessionid"]
         except Exception as error:
