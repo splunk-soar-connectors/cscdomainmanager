@@ -10,7 +10,7 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
-    "license": "Copyright (c) Splunk, 2023",
+    "license": "Copyright (c) Splunk, 2023 Inc.",
     "app_version": "1.0.0",
     "utctime_updated": "2023-01-22T12:35:20.608316Z",
     "package_name": "phantom_cscdomainmanager",
@@ -27,14 +27,13 @@
         "endpoint_url": {
             "description": "CSC endpoint url",
             "data_type": "string",
-            "required": false,
             "order": 0
         },
         "accountNumber": {
             "description": "CSC account number",
             "data_type": "numeric",
             "required": true,
-            "default": "1234567",
+            "default": 1234567,
             "order": 1
         },
         "apikey": {
@@ -72,7 +71,6 @@
                 "selector": {
                     "description": "The attribute of the domain to search with.  For example, \"qualifiedDomainName=like='example\\*'\" or \"nameservers=in=('dns1.mydns.com', 'dns2.mydns.com')\"",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "csc domain selector"
@@ -83,28 +81,24 @@
                 "operator": {
                     "description": "Search operators used to clarify selector.  == for Equals, =gt= for Greater Than, =le= for Less Than or Equal To, etc.",
                     "data_type": "string",
-                    "required": false,
                     "order": 1,
                     "name": "operator"
                 },
                 "value": {
                     "description": "Value to compare to selector based on operator.  For example, \"filter=qualifiedDomainName=={value}\"",
                     "data_type": "string",
-                    "required": false,
                     "order": 2,
                     "name": "value"
                 },
                 "sort": {
                     "description": "Specify how results should be sorted:  Ex:  propertyName,(desc|asc)",
                     "data_type": "string",
-                    "required": false,
                     "order": 3,
                     "name": "sort"
                 },
                 "custom": {
                     "description": "For custom or more complex searches that use joiner values",
                     "data_type": "string",
-                    "required": false,
                     "order": 4
                 }
             },
@@ -116,13 +110,13 @@
                 {
                     "data_path": "action_result.parameter.custom",
                     "data_type": "string",
-                    "column_name": "custom",
+                    "column_name": "Custom",
                     "column_order": 4
                 },
                 {
                     "data_path": "action_result.parameter.operator",
                     "data_type": "string",
-                    "column_name": "operator",
+                    "column_name": "Operator",
                     "column_order": 1
                 },
                 {
@@ -131,19 +125,19 @@
                     "contains": [
                         "csc domain selector"
                     ],
-                    "column_name": "selector",
+                    "column_name": "Selector",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.sort",
                     "data_type": "string",
-                    "column_name": "sort",
+                    "column_name": "Sort",
                     "column_order": 3
                 },
                 {
                     "data_path": "action_result.parameter.value",
                     "data_type": "string",
-                    "column_name": "value",
+                    "column_name": "Value",
                     "column_order": 2
                 },
                 {
@@ -179,7 +173,7 @@
             "type": "investigate",
             "read_only": true,
             "parameters": {
-                "fqdn": {
+                "qualifieddomainname": {
                     "description": "Qualified domain name",
                     "data_type": "string",
                     "required": true,
@@ -187,8 +181,7 @@
                     "contains": [
                         "domain"
                     ],
-                    "order": 0,
-                    "name": "fqdn"
+                    "order": 0
                 }
             },
             "output": [
@@ -197,12 +190,12 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameter.fqdn",
+                    "data_path": "action_result.parameter.qualifieddomainname",
                     "data_type": "string",
                     "contains": [
                         "domain"
                     ],
-                    "column_name": "domain",
+                    "column_name": "Qualifieddomainname",
                     "column_order": 0
                 },
                 {
@@ -238,7 +231,7 @@
             "type": "investigate",
             "read_only": true,
             "parameters": {
-                "fqdn": {
+                "qualifieddomainname": {
                     "description": "Values of one or more domains to check for availability, separated by a comma.  Max 50 domains in one query.",
                     "data_type": "string",
                     "required": true,
@@ -246,8 +239,7 @@
                     "contains": [
                         "domain"
                     ],
-                    "order": 0,
-                    "name": "fqdn"
+                    "order": 0
                 }
             },
             "output": [
@@ -256,12 +248,12 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameter.fqdn",
+                    "data_path": "action_result.parameter.qualifieddomainname",
                     "data_type": "string",
                     "contains": [
                         "domain"
                     ],
-                    "column_name": "fqdn",
+                    "column_name": "Qualifieddomainname",
                     "column_order": 0
                 },
                 {
@@ -318,13 +310,11 @@
                 "term": {
                     "description": "Term, in months, to register domain.  Defaults to 12 months.",
                     "data_type": "string",
-                    "required": false,
                     "order": 2
                 },
                 "brand": {
                     "description": "Brand name value to provide in domain registration.  Defaults to empty string.",
                     "data_type": "string",
-                    "required": false,
                     "order": 3
                 },
                 "registrantprofile": {
@@ -354,31 +344,26 @@
                 "dnstype": {
                     "description": "Type of DNS configuration.  Defaults to CSC_BASIC.",
                     "data_type": "string",
-                    "required": false,
                     "order": 8
                 },
                 "notes": {
                     "description": "Notes to provide in registration payload.  Defaults to \"Registered by Security Automation\" if not provided.",
                     "data_type": "string",
-                    "required": false,
                     "order": 9
                 },
                 "notificationsenabled": {
                     "description": "Whether or not email notifications are enabled for domain registration.  Defaults to False.",
                     "data_type": "boolean",
-                    "required": false,
                     "order": 10
                 },
                 "additionalnotificationemails": {
                     "description": "Comma-separated string of email addresses to add as receivers of notifications related to this domain.",
                     "data_type": "string",
-                    "required": false,
                     "order": 11
                 },
                 "redactpublicwhois": {
                     "description": "Whether to anonymize public whois info.  Defaults to False.",
                     "data_type": "boolean",
-                    "required": false,
                     "order": 12
                 }
             },
@@ -390,49 +375,49 @@
                 {
                     "data_path": "action_result.parameter.additionalnotificationemails",
                     "data_type": "string",
-                    "column_name": "additionalnotificationemails",
+                    "column_name": "Additionalnotificationemails",
                     "column_order": 11
                 },
                 {
                     "data_path": "action_result.parameter.adminprofile",
                     "data_type": "string",
-                    "column_name": "adminprofile",
+                    "column_name": "Adminprofile",
                     "column_order": 5
                 },
                 {
                     "data_path": "action_result.parameter.brand",
                     "data_type": "string",
-                    "column_name": "brand",
+                    "column_name": "Brand",
                     "column_order": 3
                 },
                 {
                     "data_path": "action_result.parameter.businessunit",
                     "data_type": "string",
-                    "column_name": "businessunit",
+                    "column_name": "Businessunit",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.dnstype",
                     "data_type": "string",
-                    "column_name": "dnstype",
+                    "column_name": "Dnstype",
                     "column_order": 8
                 },
                 {
                     "data_path": "action_result.parameter.nameservers",
                     "data_type": "string",
-                    "column_name": "nameservers",
+                    "column_name": "Nameservers",
                     "column_order": 7
                 },
                 {
                     "data_path": "action_result.parameter.notes",
                     "data_type": "string",
-                    "column_name": "notes",
+                    "column_name": "Notes",
                     "column_order": 9
                 },
                 {
                     "data_path": "action_result.parameter.notificationsenabled",
                     "data_type": "boolean",
-                    "column_name": "notificationsenabled",
+                    "column_name": "Notificationsenabled",
                     "column_order": 10
                 },
                 {
@@ -441,31 +426,31 @@
                     "contains": [
                         "domain"
                     ],
-                    "column_name": "qualifieddomainname",
+                    "column_name": "Qualifieddomainname",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.redactpublicwhois",
                     "data_type": "boolean",
-                    "column_name": "redactpublicwhois",
+                    "column_name": "Redactpublicwhois",
                     "column_order": 12
                 },
                 {
                     "data_path": "action_result.parameter.registrantprofile",
                     "data_type": "string",
-                    "column_name": "registrantprofile",
+                    "column_name": "Registrantprofile",
                     "column_order": 4
                 },
                 {
                     "data_path": "action_result.parameter.technicalprofile",
                     "data_type": "string",
-                    "column_name": "technicalprofile",
+                    "column_name": "Technicalprofile",
                     "column_order": 6
                 },
                 {
                     "data_path": "action_result.parameter.term",
                     "data_type": "string",
-                    "column_name": "term",
+                    "column_name": "Term",
                     "column_order": 2
                 },
                 {

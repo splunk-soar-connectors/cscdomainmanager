@@ -212,7 +212,7 @@ class CscDomainManagerConnector(BaseConnector):
         )
 
         if phantom.is_fail(ret_val):
-            self.save_progress("Test Connectivity Failed.")
+            self.save_progress("Test Connectivity Failed")
             self.error_print(response)
             return action_result.get_status()
 
