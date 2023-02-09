@@ -173,7 +173,7 @@
             "type": "investigate",
             "read_only": true,
             "parameters": {
-                "qualifieddomainname": {
+                "fqdn": {
                     "description": "Qualified domain name",
                     "data_type": "string",
                     "required": true,
@@ -190,12 +190,12 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameter.qualifieddomainname",
+                    "data_path": "action_result.parameter.fqdn",
                     "data_type": "string",
                     "contains": [
                         "domain"
                     ],
-                    "column_name": "Qualifieddomainname",
+                    "column_name": "Fqdn",
                     "column_order": 0
                 },
                 {
@@ -231,7 +231,7 @@
             "type": "investigate",
             "read_only": true,
             "parameters": {
-                "qualifieddomainname": {
+                "fqdn": {
                     "description": "Values of one or more domains to check for availability, separated by a comma.  Max 50 domains in one query.",
                     "data_type": "string",
                     "required": true,
@@ -248,12 +248,12 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameter.qualifieddomainname",
+                    "data_path": "action_result.parameter.fqdn",
                     "data_type": "string",
                     "contains": [
                         "domain"
                     ],
-                    "column_name": "Qualifieddomainname",
+                    "column_name": "Fqdn",
                     "column_order": 0
                 },
                 {
