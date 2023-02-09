@@ -94,10 +94,11 @@ class CscDomainManagerConnector(BaseConnector):
         try:
             resp_json = response.json()
         except Exception as error:
+            message = self._get_error_message_from_exception(error)
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    f"Unable to parse JSON response. Error: {error}",
+                    f"Unable to parse JSON response. Error: {message}",
                 ),
                 None,
             )
@@ -144,6 +145,35 @@ class CscDomainManagerConnector(BaseConnector):
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
+    def _dump_error_log(self, error, message="Exception occurred."):
+        self.error_print(message, dump_object=error)
+
+    def _get_error_message_from_exception(self, e):
+        """ This method is used to get appropriate error message from the exception.
+        :param e: Exception object
+        :return: error message
+        """
+
+        error_code = None
+        error_message = consts.CSC_ERROR_MESSAGE_UNAVAILABLE
+        self._dump_error_log(e)
+        try:
+            if hasattr(e, "args"):
+                if len(e.args) > 1:
+                    error_code = e.args[0]
+                    error_message = e.args[1]
+                elif len(e.args) == 1:
+                    error_message = e.args[0]
+        except Exception as ex:
+            self._dump_error_log(ex, "Error occurred while fetching exception information")
+
+        if not error_code:
+            error_text = "Error Message: {}".format(error_message)
+        else:
+            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_message)
+
+        return error_text
+
     def _make_rest_call(self, endpoint, action_result, method="get", **kwargs):
         config = self.get_config()
         resp_json = None
@@ -163,9 +193,10 @@ class CscDomainManagerConnector(BaseConnector):
                 resp_json,
             )
         except Exception as error:
+            message = self._get_error_message_from_exception(error)
             return RetVal(
                 action_result.set_status(
-                    phantom.APP_ERROR, f"Error Connecting to server. Details: {error}"
+                    phantom.APP_ERROR, f"Error Connecting to server. Details: {message}"
                 ),
                 resp_json,
             )
@@ -205,9 +236,7 @@ class CscDomainManagerConnector(BaseConnector):
                     )
                     return action_result.set_status(phantom.APP_ERROR)
             params = {
-                "filter": param.get("selector")
-                + param.get("operator")
-                + param.get("value")
+                "filter": param.get("selector") + param.get("operator") + param.get("value")
             }
         elif param.get("custom", None):
             params = {"filter": param.get("custom")}
@@ -371,7 +400,7 @@ class CscDomainManagerConnector(BaseConnector):
         self._account_number = config.get("accountNumber")
         self._request_headers["apikey"] = config("apikey")
         self._request_headers["Authorization"] = f"Bearer {config.get('bearer_token')}"
-        self._base_url = config.get("endpoint_url", consts.CSC_PRODUCTION_URL)
+        self._base_url = config.get("endpoint_url", consts.CSC_PRODUCTION_URL).rstrip('/')
         return phantom.APP_SUCCESS
 
     def finalize(self):

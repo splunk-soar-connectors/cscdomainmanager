@@ -15,3 +15,4 @@
 
 CSC_PRODUCTION_URL = "https://apis.cscglobal.com/dbs/api/v2"
 CSC_DEFAULT_TIMEOUT = 30
+CSC_ERROR_MESSAGE_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters"
