@@ -13,17 +13,6 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 
-# !/usr/bin/python
-# -*- coding: utf-8 -*-
-"""
-    API References:
-    https://docs.splunk.com/Documentation/SOAR/current/DevelopApps/AppDevAPIRef#finalize
-
-    # -----------------------------------------
-    # Phantom sample App Connector python file
-    # -----------------------------------------
-"""
-
 # Python 3 Compatibility imports
 from __future__ import print_function, unicode_literals
 
