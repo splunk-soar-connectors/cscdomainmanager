@@ -4,7 +4,7 @@
 Publisher: Splunk Community  
 Connector Version: 1\.0\.1  
 Product Vendor: Corporation Services Company  
-Product Name: DomainManager  
+Product Name: CSC Domain Manager  
 Product Version Supported (regex): "\.\*"  
 Minimum Product Version: 5\.4\.0  
 
@@ -44,7 +44,7 @@ Connects to CSC Domain manager platform using CSC Domain manager API services
 
 
 ### Configuration Variables
-The below configuration variables are required for this Connector to operate.  These variables are specified when configuring a DomainManager asset in SOAR.
+The below configuration variables are required for this Connector to operate.  These variables are specified when configuring a CSC Domain Manager asset in SOAR.
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
