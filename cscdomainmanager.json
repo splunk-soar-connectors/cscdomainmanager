@@ -6,7 +6,7 @@
     "product_vendor": "Corporation Services Company",
     "logo": "logo_cscdomainmanager.svg",
     "logo_dark": "logo_cscdomainmanager_dark.svg",
-    "product_name": "DomainManager",
+    "product_name": "CSC Domain Manager",
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
