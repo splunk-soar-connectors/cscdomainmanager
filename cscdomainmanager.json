@@ -11,7 +11,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
     "license": "Copyright (c) Splunk, 2023 Inc.",
-    "app_version": "1.0.1",
+    "app_version": "1.0.2",
     "utctime_updated": "2023-01-22T12:35:20.608316Z",
     "package_name": "phantom_cscdomainmanager",
     "main_module": "cscdomainmanager_connector.py",
@@ -460,6 +460,62 @@
                 {
                     "data_path": "action_result.summary",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get order status",
+            "identifier": "get_order_status",
+            "description": "Get one or more orders for a purchase request for a particular fqdn",
+            "verbose": "CSC API does not prevent submission of a registration order that is missing fields or has them malformed.  This call can help find submissions made that have failed or are held up for some other reason, requiring intervention.",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "fqdn": {
+                    "description": "The domain which was purchased and is the subject of the query to see the purchase status.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "domain"
+                    ],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "fqdn"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.fqdn",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "fqdn",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.message",
