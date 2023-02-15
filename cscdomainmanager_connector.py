@@ -364,7 +364,7 @@ class CscDomainManagerConnector(BaseConnector):
         self.save_progress(f"Handling request to get order status for {param.get('fqdn')}")
 
         retval, response = self._make_rest_call(
-            f"/orderstatus",
+            "/orderstatus",
             action_result,
             params={
                 "filter": f"qualifiedDomainName=={param.get('fqdn')}"
@@ -378,7 +378,6 @@ class CscDomainManagerConnector(BaseConnector):
 
         action_result.add_data(response)
         return action_result.set_status(phantom.APP_SUCCESS)
-
 
     def handle_action(self, param):
         """
