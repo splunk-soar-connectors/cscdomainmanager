@@ -354,6 +354,31 @@ class CscDomainManagerConnector(BaseConnector):
         action_result.add_data(response.get("result"))
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_order_status(self, param):
+        """
+        Using provided fqdn, check status
+        of requested registration order
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        self.save_progress(f"Handling request to get order status for {param.get('fqdn')}")
+
+        retval, response = self._make_rest_call(
+            "/orderstatus",
+            action_result,
+            params={
+                "filter": f"qualifiedDomainName=={param.get('fqdn')}"
+            },
+            headers=self._request_headers,
+        )
+        if phantom.is_fail(retval):
+            self.save_progress(f"Failed executing {self.get_action_identifier()}")
+            self.error_print(response.json()['description'])
+            return action_result.get_status()
+
+        action_result.add_data(response)
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def handle_action(self, param):
         """
         Router for processing requested action
@@ -369,6 +394,7 @@ class CscDomainManagerConnector(BaseConnector):
             "get_specific_domain": self._handle_get_specific_domain,
             "check_domain_available": self._handle_check_domain_available,
             "register_domain": self._handle_register_domain,
+            "get_order_status": self._handle_get_order_status
         }
 
         if action_id in action_map:
@@ -387,7 +413,7 @@ class CscDomainManagerConnector(BaseConnector):
         # get the asset config
         config = self.get_config()
         self._account_number = config.get("accountNumber")
-        self._request_headers["apikey"] = config("apikey")
+        self._request_headers["apikey"] = config.get("apikey")
         self._request_headers["Authorization"] = f"Bearer {config.get('bearer_token')}"
         self._base_url = config.get("endpoint_url", consts.CSC_PRODUCTION_URL).rstrip('/')
         return phantom.APP_SUCCESS
