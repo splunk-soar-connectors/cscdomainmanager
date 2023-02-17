@@ -483,7 +483,7 @@
             "action": "get order status",
             "identifier": "get_order_status",
             "description": "Get one or more orders for a purchase request for a particular fqdn",
-            "verbose": "CSC API does not prevent submission of a registration order that is missing fields or has them malformed.  This call can help find submissions made that have failed or are held up for some other reason, requiring intervention.",
+            "verbose": "CSC API does not prevent submission of a registration order that is missing fields or has them malformed. This call can help find submissions made that have failed or are held up for some other reason, requiring intervention.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
