@@ -54,7 +54,10 @@ class CscDomainManagerConnector(BaseConnector):
 
         return RetVal(
             action_result.set_status(
-                phantom.APP_ERROR, "Empty response and no information in the header, Statuscode: {}".format(response.status_code)
+                phantom.APP_ERROR,
+                "Empty response and no information in the header, Statuscode: {}".format(
+                    response.status_code
+                ),
             ),
             None,
         )
@@ -93,7 +96,14 @@ class CscDomainManagerConnector(BaseConnector):
             )
 
         if 200 <= response.status_code < 399:
-            return RetVal(phantom.APP_SUCCESS, resp_json)
+            message = f"{self.get_action_identifier()} - Found!"
+            return RetVal(
+                action_result.set_status(phantom.APP_SUCCESS, message), resp_json
+            )
+
+        if 404 == response.status_code:
+            message = f"{self.get_action_identifier()} - Not found!"
+            return RetVal(action_result.set_status(phantom.APP_SUCCESS, message), None)
 
         message = (
             f"Error from server. Status Code: {response.status_code} "
@@ -138,7 +148,7 @@ class CscDomainManagerConnector(BaseConnector):
         self.error_print(message, dump_object=error)
 
     def _get_error_message_from_exception(self, e):
-        """ This method is used to get appropriate error message from the exception.
+        """This method is used to get appropriate error message from the exception.
         :param e: Exception object
         :return: error message
         """
@@ -154,12 +164,16 @@ class CscDomainManagerConnector(BaseConnector):
                 elif len(e.args) == 1:
                     error_message = e.args[0]
         except Exception as ex:
-            self._dump_error_log(ex, "Error occurred while fetching exception information")
+            self._dump_error_log(
+                ex, "Error occurred while fetching exception information"
+            )
 
         if not error_code:
             error_text = "Error Message: {}".format(error_message)
         else:
-            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_message)
+            error_text = "Error Code: {}. Error Message: {}".format(
+                error_code, error_message
+            )
 
         return error_text
 
@@ -206,7 +220,7 @@ class CscDomainManagerConnector(BaseConnector):
             return action_result.get_status()
 
         self.save_progress("Test Connectivity Passed")
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return ret_val
 
     def _handle_get_all_domains(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -225,7 +239,9 @@ class CscDomainManagerConnector(BaseConnector):
                     )
                     return action_result.set_status(phantom.APP_ERROR)
             params = {
-                "filter": param.get("selector") + param.get("operator") + param.get("value")
+                "filter": param.get("selector")
+                + param.get("operator")
+                + param.get("value")
             }
         elif param.get("custom", None):
             params = {"filter": param.get("custom")}
@@ -236,13 +252,13 @@ class CscDomainManagerConnector(BaseConnector):
         if phantom.is_fail(retval):
             self.save_progress(f"Failed executing {self.get_action_identifier()}")
             self.error_print(response)
-            return action_result.get_status()
+            return retval
 
         self.save_progress("Saving domains found")
         for domain in response.get("domains"):
             action_result.add_data(domain["qualifiedDomainName"])
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return retval
 
     def _handle_get_specific_domain(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -254,16 +270,12 @@ class CscDomainManagerConnector(BaseConnector):
             params=None,
             headers=self._request_headers,
         )
-        if phantom.is_fail(retval) and retval != 404:
+        if phantom.is_fail(retval):
             self.save_progress(f"Failed executing {self.get_action_identifier()}")
             self.error_print(response)
-            return action_result.get_status()
-
-        if retval == 404:
-            self.save_progress(f"No domain found when looking for {param.get('fqdn')}")
 
         action_result.add_data(response)
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return retval
 
     def _handle_check_domain_available(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -281,11 +293,11 @@ class CscDomainManagerConnector(BaseConnector):
         if phantom.is_fail(retval):
             self.save_progress(f"Failed executing {self.get_action_identifier()}")
             self.error_print(response)
-            return action_result.get_status()
+            return retval
 
         for domain in response.get("results"):
             action_result.add_data(domain)
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return retval
 
     def _handle_register_domain(self, param):
         """
@@ -349,10 +361,10 @@ class CscDomainManagerConnector(BaseConnector):
             if phantom.is_fail(retval):
                 self.save_progress(f"Failed executing {self.get_action_identifier()}")
                 self.error_print(response)
-                return action_result.get_status()
+                return retval
 
         action_result.add_data(response.get("result"))
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return retval
 
     def _handle_get_order_status(self, param):
         """
@@ -361,23 +373,23 @@ class CscDomainManagerConnector(BaseConnector):
         """
 
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress(f"Handling request to get order status for {param.get('fqdn')}")
+        self.save_progress(
+            f"Handling request to get order status for {param.get('fqdn')}"
+        )
 
         retval, response = self._make_rest_call(
             "/orderstatus",
             action_result,
-            params={
-                "filter": f"qualifiedDomainName=={param.get('fqdn')}"
-            },
+            params={"filter": f"qualifiedDomainName=={param.get('fqdn')}"},
             headers=self._request_headers,
         )
         if phantom.is_fail(retval):
             self.save_progress(f"Failed executing {self.get_action_identifier()}")
-            self.error_print(response.json()['description'])
-            return action_result.get_status()
+            self.error_print(response.json()["description"])
+            return retval
 
         action_result.add_data(response)
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return retval
 
     def handle_action(self, param):
         """
@@ -394,7 +406,7 @@ class CscDomainManagerConnector(BaseConnector):
             "get_specific_domain": self._handle_get_specific_domain,
             "check_domain_available": self._handle_check_domain_available,
             "register_domain": self._handle_register_domain,
-            "get_order_status": self._handle_get_order_status
+            "get_order_status": self._handle_get_order_status,
         }
 
         if action_id in action_map:
@@ -415,7 +427,9 @@ class CscDomainManagerConnector(BaseConnector):
         self._account_number = config.get("accountNumber")
         self._request_headers["apikey"] = config.get("apikey")
         self._request_headers["Authorization"] = f"Bearer {config.get('bearer_token')}"
-        self._base_url = config.get("endpoint_url", consts.CSC_PRODUCTION_URL).rstrip('/')
+        self._base_url = config.get("endpoint_url", consts.CSC_PRODUCTION_URL).rstrip(
+            "/"
+        )
         return phantom.APP_SUCCESS
 
     def finalize(self):
@@ -442,7 +456,14 @@ def main():
     argparser.add_argument(
         "-p", "--password", help="Splunk SOAR password", required=False
     )
-    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
+    argparser.add_argument(
+        "-v",
+        "--verify",
+        action="store_true",
+        help="verify",
+        required=False,
+        default=False,
+    )
 
     args = argparser.parse_args()
     session_id = None
@@ -460,7 +481,9 @@ def main():
             login_url = CscDomainManagerConnector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
-            response = requests.get(login_url, verify=verify, timeout=consts.CSC_DEFAULT_TIMEOUT)  # nosec
+            response = requests.get(
+                login_url, verify=verify, timeout=consts.CSC_DEFAULT_TIMEOUT
+            )  # nosec
             csrftoken = response.cookies["csrftoken"]
 
             data = {
@@ -473,7 +496,11 @@ def main():
 
             print("Logging into Platform to get the session id")
             response = requests.post(  # nosec
-                login_url, verify=verify, data=data, headers=headers, timeout=consts.CSC_DEFAULT_TIMEOUT
+                login_url,
+                verify=verify,
+                data=data,
+                headers=headers,
+                timeout=consts.CSC_DEFAULT_TIMEOUT,
             )
             session_id = response.cookies["sessionid"]
         except Exception as error:
