@@ -239,9 +239,7 @@ class CscDomainManagerConnector(BaseConnector):
                     )
                     return action_result.set_status(phantom.APP_ERROR)
             params = {
-                "filter": param.get("selector")
-                + param.get("operator")
-                + param.get("value")
+                "filter": "{}{}{}".format(param.get("selector"), param.get("operator"), param.get("value"))
             }
         elif param.get("custom", None):
             params = {"filter": param.get("custom")}
