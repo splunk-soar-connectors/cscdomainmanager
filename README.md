@@ -2,11 +2,11 @@
 # CSC DomainManager
 
 Publisher: Splunk Community  
-Connector Version: 1\.1\.0  
+Connector Version: 1\.2\.0  
 Product Vendor: Corporation Services Company  
 Product Name: CSC Domain Manager  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.4\.0  
+Minimum Product Version: 5\.5\.0  
 
 Connects to CSC Domain manager platform using CSC Domain manager API services
 
@@ -95,7 +95,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action\_result\.status | string |  |  
+action\_result\.status | string |  |   success  failed 
 action\_result\.parameter\.custom | string |  |  
 action\_result\.parameter\.operator | string |  |  
 action\_result\.parameter\.selector | string |  `csc domain selector`  |  
@@ -121,7 +121,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action\_result\.status | string |  |  
+action\_result\.status | string |  |   success  failed 
 action\_result\.parameter\.fqdn | string |  `domain`  |  
 action\_result\.data | string |  |  
 action\_result\.summary | string |  |  
@@ -143,7 +143,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action\_result\.status | string |  |  
+action\_result\.status | string |  |   success  failed 
 action\_result\.parameter\.fqdn | string |  `domain`  |  
 action\_result\.data | string |  |  
 action\_result\.summary | string |  |  
@@ -181,7 +181,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action\_result\.status | string |  |  
+action\_result\.status | string |  |   success  failed 
 action\_result\.parameter\.additionalnotificationemails | string |  |  
 action\_result\.parameter\.adminprofile | string |  |  
 action\_result\.parameter\.brand | string |  |  
@@ -217,7 +217,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action\_result\.status | string |  |  
+action\_result\.status | string |  |   success  failed 
 action\_result\.parameter\.fqdn | string |  `domain`  |  
 action\_result\.data | string |  |  
 action\_result\.summary | string |  |  
