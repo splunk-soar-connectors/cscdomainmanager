@@ -1,6 +1,19 @@
+# Copyright (c) 2025 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # File: cscdomainmanager_connector.py
 #
-# Copyright (c) Splunk, 2023 Inc.
+# Copyright (c) Splunk, 2023-2025 Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +27,6 @@
 # and limitations under the License.
 
 # Python 3 Compatibility imports
-from __future__ import print_function, unicode_literals
 
 import argparse
 import getpass
@@ -55,9 +67,7 @@ class CscDomainManagerConnector(BaseConnector):
         return RetVal(
             action_result.set_status(
                 phantom.APP_ERROR,
-                "Empty response and no information in the header, Statuscode: {}".format(
-                    response.status_code
-                ),
+                f"Empty response and no information in the header, Statuscode: {response.status_code}",
             ),
             None,
         )
@@ -97,17 +107,14 @@ class CscDomainManagerConnector(BaseConnector):
 
         if 200 <= response.status_code < 399:
             message = f"{self.get_action_identifier()} - Found!"
-            return RetVal(
-                action_result.set_status(phantom.APP_SUCCESS, message), resp_json
-            )
+            return RetVal(action_result.set_status(phantom.APP_SUCCESS, message), resp_json)
 
         if 404 == response.status_code:
             message = f"{self.get_action_identifier()} - Not found!"
             return RetVal(action_result.set_status(phantom.APP_SUCCESS, message), None)
 
         message = (
-            f"Error from server. Status Code: {response.status_code} "
-            f"Data from server: {response.text.replace('{', '{{').replace('}', '}}')}"
+            f"Error from server. Status Code: {response.status_code} Data from server: {response.text.replace('{', '{{').replace('}', '}}')}"
         )
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
@@ -164,16 +171,12 @@ class CscDomainManagerConnector(BaseConnector):
                 elif len(e.args) == 1:
                     error_message = e.args[0]
         except Exception as ex:
-            self._dump_error_log(
-                ex, "Error occurred while fetching exception information"
-            )
+            self._dump_error_log(ex, "Error occurred while fetching exception information")
 
         if not error_code:
-            error_text = "Error Message: {}".format(error_message)
+            error_text = f"Error Message: {error_message}"
         else:
-            error_text = "Error Code: {}. Error Message: {}".format(
-                error_code, error_message
-            )
+            error_text = f"Error Code: {error_code}. Error Message: {error_message}"
 
         return error_text
 
@@ -190,17 +193,13 @@ class CscDomainManagerConnector(BaseConnector):
             )
         except AttributeError:
             return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, f"Invalid method: {method}"
-                ),
+                action_result.set_status(phantom.APP_ERROR, f"Invalid method: {method}"),
                 resp_json,
             )
         except Exception as error:
             message = self._get_error_message_from_exception(error)
             return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, f"Error Connecting to server. Details: {message}"
-                ),
+                action_result.set_status(phantom.APP_ERROR, f"Error Connecting to server. Details: {message}"),
                 resp_json,
             )
 
@@ -210,9 +209,7 @@ class CscDomainManagerConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         self.save_progress(f"Testing connectivity to {self._base_url}")
-        ret_val, response = self._make_rest_call(
-            "/domains", action_result, params=None, headers=self._request_headers
-        )
+        ret_val, response = self._make_rest_call("/domains", action_result, params=None, headers=self._request_headers)
 
         if phantom.is_fail(ret_val):
             self.save_progress("Test Connectivity Failed")
@@ -231,22 +228,14 @@ class CscDomainManagerConnector(BaseConnector):
         if not param.get("custom", None) and param:
             for part in ["selector", "operator", "value"]:
                 if not param.get(part, None):
-                    self.error_print(
-                        f"Inputs were provided but failed to specify required {part}"
-                    )
-                    self.save_progress(
-                        f"Inputs were provided but failed to specify required {part}"
-                    )
+                    self.error_print(f"Inputs were provided but failed to specify required {part}")
+                    self.save_progress(f"Inputs were provided but failed to specify required {part}")
                     return action_result.set_status(phantom.APP_ERROR)
-            params = {
-                "filter": "{}{}{}".format(param.get("selector"), param.get("operator"), param.get("value"))
-            }
+            params = {"filter": "{}{}{}".format(param.get("selector"), param.get("operator"), param.get("value"))}
         elif param.get("custom", None):
             params = {"filter": param.get("custom")}
 
-        retval, response = self._make_rest_call(
-            "/domains", action_result, params=params, headers=self._request_headers
-        )
+        retval, response = self._make_rest_call("/domains", action_result, params=params, headers=self._request_headers)
         if phantom.is_fail(retval):
             self.save_progress(f"Failed executing {self.get_action_identifier()}")
             self.error_print(response)
@@ -278,9 +267,7 @@ class CscDomainManagerConnector(BaseConnector):
     def _handle_check_domain_available(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress(f"We have {param.get('fqdn')}")
-        self.save_progress(
-            f'Handling request to check availability of domains {param.get("fqdn")}'
-        )
+        self.save_progress(f"Handling request to check availability of domains {param.get('fqdn')}")
 
         retval, response = self._make_rest_call(
             "/domains/availability",
@@ -326,16 +313,11 @@ class CscDomainManagerConnector(BaseConnector):
             "notes": param.get("notes", "Registered by Security Automation"),
             "notifications": {
                 "enabled": param.get("notificationsenabled", False),
-                "additionalNotificationEmails": list(
-                    param.get("additionalnotificationemails", "").split(",")
-                ),
+                "additionalNotificationEmails": list(param.get("additionalnotificationemails", "").split(",")),
             },
             "redactPublicWhois": param.get("redactpublicwhois", False),
         }
-        self.save_progress(
-            f"Will register domain with {registration_schema} if our bearer token does not have an "
-            "existing order template"
-        )
+        self.save_progress(f"Will register domain with {registration_schema} if our bearer token does not have an existing order template")
 
         retval, response = self._make_rest_call(
             "/domains/registration",
@@ -346,8 +328,7 @@ class CscDomainManagerConnector(BaseConnector):
         )
         if phantom.is_fail(retval):
             self.save_progress(
-                f"Failed registering {param.get('qualifieddomainname')} with only "
-                "specifying the domain.  Trying again with full schema..."
+                f"Failed registering {param.get('qualifieddomainname')} with only specifying the domain.  Trying again with full schema..."
             )
             retval, response = self._make_rest_call(
                 "/domains/registration",
@@ -371,9 +352,7 @@ class CscDomainManagerConnector(BaseConnector):
         """
 
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress(
-            f"Handling request to get order status for {param.get('fqdn')}"
-        )
+        self.save_progress(f"Handling request to get order status for {param.get('fqdn')}")
 
         retval, response = self._make_rest_call(
             "/orderstatus",
@@ -425,9 +404,7 @@ class CscDomainManagerConnector(BaseConnector):
         self._account_number = config.get("accountNumber")
         self._request_headers["apikey"] = config.get("apikey")
         self._request_headers["Authorization"] = f"Bearer {config.get('bearer_token')}"
-        self._base_url = config.get("endpoint_url", consts.CSC_PRODUCTION_URL).rstrip(
-            "/"
-        )
+        self._base_url = config.get("endpoint_url", consts.CSC_PRODUCTION_URL).rstrip("/")
         return phantom.APP_SUCCESS
 
     def finalize(self):
@@ -448,12 +425,8 @@ def main():
 
     argparser = argparse.ArgumentParser()
     argparser.add_argument("input_test_json", help="Input Test JSON file")
-    argparser.add_argument(
-        "-u", "--username", help="Splunk SOAR username", required=False
-    )
-    argparser.add_argument(
-        "-p", "--password", help="Splunk SOAR password", required=False
-    )
+    argparser.add_argument("-u", "--username", help="Splunk SOAR username", required=False)
+    argparser.add_argument("-p", "--password", help="Splunk SOAR password", required=False)
     argparser.add_argument(
         "-v",
         "--verify",
@@ -479,9 +452,7 @@ def main():
             login_url = CscDomainManagerConnector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
-            response = requests.get(
-                login_url, verify=verify, timeout=consts.CSC_DEFAULT_TIMEOUT
-            )  # nosec
+            response = requests.get(login_url, verify=verify, timeout=consts.CSC_DEFAULT_TIMEOUT)  # nosec
             csrftoken = response.cookies["csrftoken"]
 
             data = {
