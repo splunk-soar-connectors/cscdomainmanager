@@ -77,30 +77,45 @@
                     ],
                     "order": 0,
                     "name": "selector"
+                    "id": 1,
+                    "param_name": "selector",
+                    "descriptionError": false
                 },
                 "operator": {
                     "description": "Search operators used to clarify selector. == for Equals, =gt= for Greater Than, =le= for Less Than or Equal To, etc",
                     "data_type": "string",
                     "order": 1,
-                    "name": "operator"
+                    "name": "operator",
+                    "id": 2,
+                    "param_name": "operator"
                 },
                 "value": {
                     "description": "Value to compare to selector based on operator. For example, \"filter=qualifiedDomainName=={value}\"",
                     "data_type": "string",
                     "order": 2,
-                    "name": "value"
+                    "name": "value",
+                    "id": 3,
+                    "param_name": "value"
                 },
                 "sort": {
                     "description": "Specify how results should be sorted: Ex: propertyName,(desc|asc)",
                     "data_type": "string",
                     "order": 3,
-                    "name": "sort"
+                    "name": "sort",
+                    "id": 4,
+                    "param_name": "sort"
                 },
                 "custom": {
                     "description": "For custom or more complex searches that use joiner values",
                     "data_type": "string",
-                    "order": 4
+                    "order": 4,
+                    "name": "custom",
+                    "id": 5,
+                    "param_name": "custom"
                 }
+            },
+            "render": {
+                "type": "table"
             },
             "output": [
                 {
@@ -112,41 +127,13 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.custom",
-                    "data_type": "string",
-                    "column_name": "Custom",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "action_result.parameter.operator",
-                    "data_type": "string",
-                    "column_name": "Operator",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.parameter.selector",
+                    "data_path": "action_result.data.*.data.*",
                     "data_type": "string",
                     "contains": [
-                        "csc domain selector"
+                        "domain"
                     ],
-                    "column_name": "Selector",
+                    "column_name": "Domains",
                     "column_order": 0
-                },
-                {
-                    "data_path": "action_result.parameter.sort",
-                    "data_type": "string",
-                    "column_name": "Sort",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.parameter.value",
-                    "data_type": "string",
-                    "column_name": "Value",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
@@ -165,9 +152,6 @@
                     "data_type": "numeric"
                 }
             ],
-            "render": {
-                "type": "table"
-            },
             "versions": "EQ(*)"
         },
         {
