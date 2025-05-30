@@ -225,7 +225,7 @@ class CscDomainManagerConnector(BaseConnector):
 
         # Set filter parameters for search
         params = None
-        if not param.get("custom", None) and param:
+        if not param.get("custom", None) and params:
             for part in ["selector", "operator", "value"]:
                 if not param.get(part, None):
                     self.error_print(f"Inputs were provided but failed to specify required {part}")
