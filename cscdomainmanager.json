@@ -7,7 +7,7 @@
     "logo": "logo_cscdomainmanager.svg",
     "logo_dark": "logo_cscdomainmanager_dark.svg",
     "product_name": "CSC Domain Manager",
-    "python_version": "3",
+    "python_version": ["3.9", "3.13"],
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
     "license": "Copyright (c) Splunk, 2023-2025 Inc.",
