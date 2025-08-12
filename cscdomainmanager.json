@@ -1,19 +1,19 @@
 {
-    "appid": "8c6e48bc-2de6-4d2a-b873-9deac4c14123",
-    "name": "CSC Test 2",
+    "appid": "600d229d-bff3-42cc-ba3f-863b8b701f2e",
+    "name": "CSC DomainManager",
     "description": "Connects to CSC Domain manager platform using CSC Domain manager API services",
     "type": "information",
-    "product_vendor": "Corporation Services Company_clone_1753417297481",
+    "product_vendor": "Corporation Services Company",
     "logo": "logo_cscdomainmanager.svg",
     "logo_dark": "logo_cscdomainmanager_dark.svg",
-    "product_name": "CSC Domain Manager_clone_1753417297481",
+    "product_name": "CSC Domain Manager",
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
     "license": "Copyright (c) Splunk, 2023 Inc.",
-    "app_version": "1.5.0",
-    "utctime_updated": "2025-08-06T05:44:51.498028Z",
-    "package_name": "phantom_csctest2",
+    "app_version": "1.2.0",
+    "utctime_updated": "2023-01-22T12:35:20.608316Z",
+    "package_name": "phantom_cscdomainmanager",
     "main_module": "cscdomainmanager_connector.py",
     "min_phantom_version": "5.3.2",
     "app_wizard_version": "1.0.0",
@@ -79,69 +79,36 @@
                 "selector": {
                     "description": "The attribute of the domain to search with. For example, \"qualifiedDomainName=like='example\\*'\" or \"nameservers=in=('dns1.mydns.com', 'dns2.mydns.com')\"",
                     "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
                         "csc domain selector"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0,
-                    "name": "selector",
-                    "id": 1,
-                    "param_name": "selector"
+                    "name": "selector"
                 },
                 "operator": {
                     "description": "Search operators used to clarify selector. == for Equals, =gt= for Greater Than, =le= for Less Than or Equal To, etc",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 1,
-                    "name": "operator",
-                    "id": 2,
-                    "param_name": "operator"
+                    "name": "operator"
                 },
                 "value": {
                     "description": "Value to compare to selector based on operator. For example, \"filter=qualifiedDomainName=={value}\"",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 2,
-                    "name": "value",
-                    "id": 3,
-                    "param_name": "value"
+                    "name": "value"
                 },
                 "sort": {
                     "description": "Specify how results should be sorted: Ex: propertyName,(desc|asc)",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 3,
-                    "name": "sort",
-                    "id": 4,
-                    "param_name": "sort"
+                    "name": "sort"
                 },
                 "custom": {
                     "description": "For custom or more complex searches that use joiner values",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 4,
-                    "name": "custom",
-                    "id": 5,
-                    "param_name": "custom"
+                    "name": "custom"
                 }
             },
             "output": [
@@ -154,13 +121,41 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.data.*",
+                    "data_path": "action_result.parameter.custom",
+                    "data_type": "string",
+                    "column_name": "Custom",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.parameter.operator",
+                    "data_type": "string",
+                    "column_name": "Operator",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.selector",
                     "data_type": "string",
                     "contains": [
-                        "domain"
+                        "csc domain selector"
                     ],
-                    "column_name": "Domains",
+                    "column_name": "Selector",
                     "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.sort",
+                    "data_type": "string",
+                    "column_name": "Sort",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.parameter.value",
+                    "data_type": "string",
+                    "column_name": "Value",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
@@ -654,12 +649,9 @@
             }
         ]
     },
-    "directory": "csctest2_8c6e48bc-2de6-4d2a-b873-9deac4c14123",
+    "directory": "cscdomainmanager_600d229d-bff3-42cc-ba3f-863b8b701f2e",
     "version": 1,
     "appname": "-",
     "executable": "spawn3",
-    "disabled": false,
-    "copied_from_id": 528,
-    "copied_from_version": "1.4.0",
-    "custom_made": true
+    "disabled": false
 }
