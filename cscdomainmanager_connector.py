@@ -223,28 +223,45 @@ class CscDomainManagerConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Handling request to get all domains")
 
-        # Set filter parameters for search
+        selector = param.get("selector", None)
+        operator = param.get("operator", None)
+        value = param.get("value", None)
+        sort = param.get("sort", None)
+        custom = param.get("custom", None)
+
         params = None
-        if not param.get("custom", None) and params:
-            for part in ["selector", "operator", "value"]:
-                if not param.get(part, None):
+        
+        if not any([selector, operator, value, custom]):
+            params = None
+        
+        elif selector and operator and value:
+            params = {
+                "filter": f"{selector}{operator}{value}"
+            }
+            if sort:
+                params["sort"] = sort
+        
+        elif custom:
+            params = {"filter": custom}
+
+        else:            
+            for part, val in [("selector", selector), ("operator", operator), ("value", value)]:
+                if not val:
                     self.error_print(f"Inputs were provided but failed to specify required {part}")
                     self.save_progress(f"Inputs were provided but failed to specify required {part}")
-                    return action_result.set_status(phantom.APP_ERROR)
-            params = {"filter": "{}{}{}".format(param.get("selector"), param.get("operator"), param.get("value"))}
-        elif param.get("custom", None):
-            params = {"filter": param.get("custom")}
+            return action_result.set_status(phantom.APP_ERROR)
 
-        retval, response = self._make_rest_call("/domains", action_result, params=params, headers=self._request_headers)
+        retval, response = self._make_rest_call(
+            "/domains", action_result, params=params, headers=self._request_headers
+        )
         if phantom.is_fail(retval):
             self.save_progress(f"Failed executing {self.get_action_identifier()}")
             self.error_print(response)
             return retval
 
         self.save_progress("Saving domains found")
-        for domain in response.get("domains"):
-            action_result.add_data(domain["qualifiedDomainName"])
-
+        for domain in response.get("domains", []):
+            action_result.add_data(domain.get("qualifiedDomainName"))
         return retval
 
     def _handle_get_specific_domain(self, param):
