@@ -69,16 +69,16 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failed |
-action_result.parameter.custom | string | | |
-action_result.parameter.operator | string | | |
-action_result.parameter.selector | string | `csc domain selector` | |
-action_result.parameter.sort | string | | |
-action_result.parameter.value | string | | |
-action_result.data | string | | |
+action_result.data.\*.data.\* | string | `domain` | |
 action_result.summary | string | | |
 action_result.message | string | | |
 summary.total_objects | numeric | | |
 summary.total_objects_successful | numeric | | |
+action_result.parameter.selector | string | `csc domain selector` | |
+action_result.parameter.operator | string | | |
+action_result.parameter.value | string | | |
+action_result.parameter.sort | string | | |
+action_result.parameter.custom | string | | |
 
 ## action: 'get specific domain'
 
