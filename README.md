@@ -1,10 +1,10 @@
 # CSC DomainManager
 
 Publisher: Splunk Community \
-Connector Version: 1.2.0 \
+Connector Version: 1.2.1 \
 Product Vendor: Corporation Services Company \
 Product Name: CSC Domain Manager \
-Minimum Product Version: 5.3.2
+Minimum Product Version: 5.5.0
 
 Connects to CSC Domain manager platform using CSC Domain manager API services
 
