@@ -10,7 +10,7 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
-    "license": "Copyright (c) Splunk, 2023 Inc.",
+    "license": "Copyright (c) Splunk, 2023-2025 Inc.",
     "app_version": "1.2.0",
     "utctime_updated": "2023-01-22T12:35:20.608316Z",
     "package_name": "phantom_cscdomainmanager",
@@ -177,6 +177,29 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.selector",
+                    "data_type": "string",
+                    "contains": [
+                        "csc domain selector"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.operator",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.sort",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.custom",
+                    "data_type": "string"
                 }
             ],
             "render": {
@@ -625,38 +648,17 @@
     "pip39_dependencies": {
         "wheel": [
             {
-                "module": "beautifulsoup4",
-                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
-            },
-            {
-                "module": "certifi",
-                "input_file": "wheels/py3/certifi-2022.12.7-py3-none-any.whl"
-            },
-            {
                 "module": "chardet",
                 "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
-            },
-            {
-                "module": "idna",
-                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
-            },
-            {
-                "module": "requests",
-                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "soupsieve",
-                "input_file": "wheels/py3/soupsieve-2.4-py3-none-any.whl"
-            },
-            {
-                "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.14-py2.py3-none-any.whl"
             }
         ]
     },
-    "directory": "cscdomainmanager_600d229d-bff3-42cc-ba3f-863b8b701f2e",
-    "version": 1,
-    "appname": "-",
-    "executable": "spawn3",
-    "disabled": false
+    "pip313_dependencies": {
+        "wheel": [
+            {
+                "module": "chardet",
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
+            }
+        ]
+    }
 }

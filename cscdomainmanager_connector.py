@@ -230,30 +230,26 @@ class CscDomainManagerConnector(BaseConnector):
         custom = param.get("custom", None)
 
         params = None
-        
+
         if not any([selector, operator, value, custom]):
             params = None
-        
+
         elif selector and operator and value:
-            params = {
-                "filter": f"{selector}{operator}{value}"
-            }
+            params = {"filter": f"{selector}{operator}{value}"}
             if sort:
                 params["sort"] = sort
-        
+
         elif custom:
             params = {"filter": custom}
 
-        else:            
+        else:
             for part, val in [("selector", selector), ("operator", operator), ("value", value)]:
                 if not val:
                     self.error_print(f"Inputs were provided but failed to specify required {part}")
                     self.save_progress(f"Inputs were provided but failed to specify required {part}")
             return action_result.set_status(phantom.APP_ERROR)
 
-        retval, response = self._make_rest_call(
-            "/domains", action_result, params=params, headers=self._request_headers
-        )
+        retval, response = self._make_rest_call("/domains", action_result, params=params, headers=self._request_headers)
         if phantom.is_fail(retval):
             self.save_progress(f"Failed executing {self.get_action_identifier()}")
             self.error_print(response)
