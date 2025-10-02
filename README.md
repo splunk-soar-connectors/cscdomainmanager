@@ -1,7 +1,7 @@
 # CSC DomainManager
 
 Publisher: Splunk Community \
-Connector Version: 1.2.1 \
+Connector Version: 1.2.2 \
 Product Vendor: Corporation Services Company \
 Product Name: CSC Domain Manager \
 Minimum Product Version: 5.5.0
