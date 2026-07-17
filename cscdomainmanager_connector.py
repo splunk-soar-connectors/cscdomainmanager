@@ -32,6 +32,7 @@ import argparse
 import getpass
 import json
 import sys
+import urllib.parse
 
 import phantom.app as phantom
 import requests
@@ -263,9 +264,10 @@ class CscDomainManagerConnector(BaseConnector):
     def _handle_get_specific_domain(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress(f"Handling request to get domain {param.get('fqdn')}")
+        encoded_fqdn = urllib.parse.quote(param["fqdn"], safe="")
 
         retval, response = self._make_rest_call(
-            f"/domains/{param.get('fqdn')}",
+            f"/domains/{encoded_fqdn}",
             action_result,
             params=None,
             headers=self._request_headers,
