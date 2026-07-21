@@ -1,9 +1,9 @@
 # CSC DomainManager
 
-Publisher: Splunk Community \
-Connector Version: 1.2.2 \
-Product Vendor: Corporation Services Company \
-Product Name: CSC Domain Manager \
+Publisher: Splunk Community <br>
+Connector Version: 1.2.2 <br>
+Product Vendor: Corporation Services Company <br>
+Product Name: CSC Domain Manager <br>
 Minimum Product Version: 5.5.0
 
 Connects to CSC Domain manager platform using CSC Domain manager API services
@@ -21,18 +21,18 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
-[get all domains](#action-get-all-domains) - Get all domain portfolio data \
-[get specific domain](#action-get-specific-domain) - Get domain data by qualified domain name \
-[check domain available](#action-check-domain-available) - Check registration availability for one or more domain names \
-[register domain](#action-register-domain) - Place a domain registration order \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
+[get all domains](#action-get-all-domains) - Get all domain portfolio data <br>
+[get specific domain](#action-get-specific-domain) - Get domain data by qualified domain name <br>
+[check domain available](#action-check-domain-available) - Check registration availability for one or more domain names <br>
+[register domain](#action-register-domain) - Place a domain registration order <br>
 [get order status](#action-get-order-status) - Get one or more orders for a purchase request for a particular fqdn
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -47,7 +47,7 @@ No Output
 
 Get all domain portfolio data
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 By default, pull first page of domains found in the account (15000 by default). If provided, filter parameter can limit the search results.
@@ -84,7 +84,7 @@ action_result.parameter.custom | string | | |
 
 Get domain data by qualified domain name
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -109,7 +109,7 @@ summary.total_objects_successful | numeric | | |
 
 Check registration availability for one or more domain names
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -134,7 +134,7 @@ summary.total_objects_successful | numeric | | |
 
 Place a domain registration order
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 If an order template is available for the account mapped to the bearer token, then only the "qualifiedDomainName" property is required. Otherwise, the request is built with the values provided in the fields below.
@@ -187,7 +187,7 @@ summary.total_objects_successful | numeric | | |
 
 Get one or more orders for a purchase request for a particular fqdn
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 CSC API does not prevent submission of a registration order that is missing fields or has them malformed. This call can help find submissions made that have failed or are held up for some other reason, requiring intervention.
@@ -214,7 +214,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
