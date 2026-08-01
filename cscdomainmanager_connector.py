@@ -61,6 +61,28 @@ class CscDomainManagerConnector(BaseConnector):
         self._account_number = None
         self._request_headers = {"Accept": "application/json"}
 
+    @staticmethod
+    def _normalize_fqdn(value):
+        if not isinstance(value, str) or not value or value in (".", "..") or value != value.strip():
+            return None
+        try:
+            ascii_fqdn = value.encode("idna").decode("ascii")
+        except UnicodeError:
+            return None
+        if len(ascii_fqdn) > 253:
+            return None
+        labels = ascii_fqdn.split(".")
+        if any(
+            not label
+            or len(label) > 63
+            or not label[0].isalnum()
+            or not label[-1].isalnum()
+            or any(not (character.isalnum() or character == "-") for character in label)
+            for label in labels
+        ):
+            return None
+        return ascii_fqdn
+
     def _process_empty_response(self, response, action_result):
         if response.status_code == [200, 204]:
             return RetVal(phantom.APP_SUCCESS, {})
@@ -264,7 +286,10 @@ class CscDomainManagerConnector(BaseConnector):
     def _handle_get_specific_domain(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress(f"Handling request to get domain {param.get('fqdn')}")
-        encoded_fqdn = urllib.parse.quote(param["fqdn"], safe="")
+        fqdn = self._normalize_fqdn(param.get("fqdn"))
+        if fqdn is None:
+            return action_result.set_status(phantom.APP_ERROR, "Please provide a valid fully qualified domain name")
+        encoded_fqdn = urllib.parse.quote(fqdn, safe="")
 
         retval, response = self._make_rest_call(
             f"/domains/{encoded_fqdn}",
