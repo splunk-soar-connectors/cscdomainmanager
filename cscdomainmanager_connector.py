@@ -264,7 +264,11 @@ class CscDomainManagerConnector(BaseConnector):
     def _handle_get_specific_domain(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress(f"Handling request to get domain {param.get('fqdn')}")
-        encoded_fqdn = urllib.parse.quote(param["fqdn"], safe="")
+        fqdn = str(param["fqdn"])
+        if fqdn in {".", ".."}:
+            return action_result.set_status(phantom.APP_ERROR, "Please provide a valid fully qualified domain name")
+
+        encoded_fqdn = urllib.parse.quote(fqdn, safe="")
 
         retval, response = self._make_rest_call(
             f"/domains/{encoded_fqdn}",
