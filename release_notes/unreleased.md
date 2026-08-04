@@ -1,3 +1,1 @@
 **Unreleased**
-
-* Reject exact dot-segment domain values before constructing domain lookup endpoints.
